@@ -1,19 +1,22 @@
 "use server";
 
-interface BookInfoType {
-    cover_i: number;
+interface VolumeInfoProps {
     title: string;
-    key: string;
-    author_name: string[];
-    cover_edition_key: string
+    authors: string;
+    imageLinks: { thumbnail: string };
+};
+
+interface VolumeDoc {
+    volumeInfo: VolumeInfoProps;
+    id: string;
 };
 
 interface BookType {
-    docs:BookInfoType[];
+    items: VolumeDoc[];
 };
 
 export async function getTitleBooks(title: string) {
-    const dataForTitle = await fetch(`https://openlibrary.org/search.json?title=${title}`, {cache: "no-cache"});
+    const dataForTitle = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${title}&filter=ebooks`);
 
     if(!dataForTitle.ok) {
         throw new Error("Error ao buscaAS as dados do titulo");
@@ -22,17 +25,17 @@ export async function getTitleBooks(title: string) {
     const dataForTitleJson: BookType = await dataForTitle.json();
 
 
-    const data = dataForTitleJson.docs.slice(0, 20).map((single) => {
-        const { title, cover_i, key, author_name, cover_edition_key } = single;
+    const data = dataForTitleJson.items.slice(0, 20).map((single) => {
+        const { title, authors, imageLinks } = single.volumeInfo;
 
         return {
-            key,
-            title,
-            cover_i,
-            author_name,
-            cover_edition_key,
+            id: single.id, 
+            title, 
+            authors,
+            imageLinks,
         };
 
     });
+
     return data;
 };

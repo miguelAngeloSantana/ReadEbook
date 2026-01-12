@@ -3,16 +3,15 @@
 import { useState, KeyboardEvent } from "react";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import { getTitleBooks } from "@/action/getTitleBook";
 
-
 interface BookSearchType {
-    cover_i: number
-    title: string
-    key: string
-    author_name: string[]
-    cover_edition_key: string
+    id: string;
+    title: string;
+    authors: string;
+    imageLinks: { thumbnail: string };
 };
 
 export default function SearchBar() {
@@ -66,37 +65,40 @@ export default function SearchBar() {
                     style={{ marginTop: "1.3rem"}}    
                 >
                     <ul 
-                        className="flex flex-row items-center justify-center flex-wrap w-[83rem]"
+                        className="flex flex-row items-center justify-center flex-wrap w-332"
                         style={{ gap: "2.8rem", padding: "0 0.8rem" }}
                     >
                         {
                             bookInfo.map(item => (
-                                <li 
-                                className="flex flex-col items-center"
+                                <Link key={item.id} href={`/pagedetails/${item.id}`}>
+                                    <li 
+                                        className="flex flex-col items-center"
                                 
-                                key={item.key}
-                            >
-                                { item.cover_i ? <Image 
-                                        src={`https://covers.openlibrary.org/b/id/${item.cover_i}.jpg` } 
-                                        alt="capa do livro"
-                                        width={'160'}
-                                        height={'160'}
-                                    />: <div 
-                                        className="w-[160] h-[240] bg-amber-50 flex items-center justify-center text-center">
-                                            {item.title}
-                                        </div>}
+                                    >
+                                        { item.imageLinks ? <Image 
+                                                src={item.imageLinks.thumbnail}
+                                                alt="capa do livro"
+                                                width={160}
+                                                height={160}
+                                            />: <div 
+                                                className="w-[160] h-[240] bg-amber-50 flex items-center justify-center text-center">
+                                                    {item.title}
+                                                </div>
+                                        }
                     
 
-                                    <p 
-                                        className="text-white text-bold text-center text-lg"
-                                        style={{ marginTop: "1rem"}}
-                                    >{item.title}</p>
-                                    
-                                    <p 
-                                        className="text-[rgba(245,245,245, 0.8)] text-center text-sm"
-                                        style={{ marginTop: "0.8rem" ,color: "rgba(245,245,245, .8)"}}    
-                                    >{item.author_name}</p>
-                                </li>
+                                            <p 
+                                                className="text-white text-bold text-center text-lg"
+                                                style={{ marginTop: "1rem"}}
+                                            >{item.title}</p>
+                                            
+                                            <p 
+                                                className="text-[rgba(245,245,245, 0.8)] text-center text-sm"
+                                                style={{ marginTop: "0.8rem" ,color: "rgba(245,245,245, .8)"}}    
+                                            >{item.authors}</p>
+                                    </li>
+                                
+                                </Link>
                             ))
                         }
                     </ul>
