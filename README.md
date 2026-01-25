@@ -29,3 +29,16 @@ A escolha do PostgreSQL como banco de dados se deu pelo fato que esse projeto pr
 Apos iniciar o projeto e fazer todas as funcionalidades descritas, me veio a idea e a oportunidade de implementar autenticação no projeto, tendo essa idea por meio da funcionalidade de poder marcar os ebooks já lidos, permitindo que eles saem da aplicação e os dados continuem salvos. A biblioteca que eu escolhi usar para isso foi a better-auth, pois ela têm otimos exemplos em sua documentação usando o prisma com o PostgreSQL, o que me beneficiaria muito.
 
 Para testar, eu fiz isso manualmente, criando duas contas diferentes com dois destinos diferentes para cada uma e salvando essas informações no banco de dados.
+
+## Telas
+<div align="center">
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaPrincipal.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaRegistro.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaLogin.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaResultadoPesquisa.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaEbookNaoSalvo.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaObrasAutor.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaObrasGenero.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaEbookJaSalvo.png" />
+  <img src="https://github.com/miguelAngeloSantana/ReadEbook/blob/main/screenshots/TelaPerfil.png" />
+</div>
