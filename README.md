@@ -1,7 +1,7 @@
 # ReadFree
 
 ## descrição
-Site para procurar e baixar ebooks, contendo também a funcionalidade de procurar audio livros
+Site para pesquisar ebooks, podendo abaixa-los ou ler eles no prórpio navegador ou comprar eles diretamente na playstore
 
 ## Tecnologias
 1. NextJs
@@ -14,10 +14,7 @@ Site para procurar e baixar ebooks, contendo também a funcionalidade de procura
 
 ## Funcionalidades
 - Download de eBooks
-- Reprodução de audiolivros (futura)
 - Escrever uma critica e exibi-la
 - Exibir outras obras do mesmo autor e/ou do mesmo gênero
 - Marcar livros já lidos / vai ler
 - Tela para encontrar bibliotecas próximas
-- Filtrar por autor, gênero, livraria etc
-- Histórico de leituras
