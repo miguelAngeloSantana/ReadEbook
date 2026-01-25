@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 // import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import ButtonMenu from "@/components/ButtonMenu";
+import ButtonPerfil from "@/components/ButtonPerfil";
+
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
 //   subsets: ["latin"],
@@ -21,7 +24,9 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>)
+
+{
   return (
     <html lang="en">
       <body
@@ -36,23 +41,9 @@ export default function RootLayout({
             <div 
                 className="flex md:flex-row flex-col justify-between"
                 style={{marginTop: "15px", gap: "2rem"}}    
-            >
-                
-                    <button 
-                        className="bg-blue-200 rounded-3xl text text-[#121212] font-bold cursor-pointer"
-                        style={{padding: "0.8rem"}}
-                    >
-                        Login/Registro
-                    </button>
-
-        
-                    <button 
-                        className="bg-blue-200 rounded-3xl text-[#121212] font-bold cursor-pointer"
-                        style={{padding: "0.8rem"}}
-                    >
-                        Favoritos
-                    </button>
-                
+            >  
+              <ButtonMenu />
+              <ButtonPerfil />
             </div>
         </div>
         {children}

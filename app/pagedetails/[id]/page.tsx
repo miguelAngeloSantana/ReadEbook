@@ -1,11 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { CalendarDays, BookText, FileDigit } from "lucide-react"
+import { CalendarDays, BookText, FileDigit } from "lucide-react";
+
+import { showEbook } from "@/action/uptadeStatusReading";
+import DesfavoritarEbook from "@/components/DesvaforitarEbook";
+import FavoritarEbook from "@/components/FavoritarEbook";
 
 interface Props {
     params: { id: string }
-}
+};
 
 interface VolumeInfoProps {
     title: string;
@@ -16,12 +20,15 @@ interface VolumeInfoProps {
     categories: string[]
     imageLinks: { thumbnail: string };
     infoLink: string;
-    // saleInfo: { buyLink: string };
-    buyLink: string
+};
+
+interface AcessInfoProps {
+    epub: {downloadLink: string}
 };
 
 interface VolumeDoc {
     volumeInfo: VolumeInfoProps;
+    accessInfo: AcessInfoProps
 };
 
 interface DataBookProps {
@@ -31,6 +38,8 @@ interface DataBookProps {
 export default async function PageDetails({params}: Props) {
     const { id } = await params;
 
+    const ebook = await showEbook(id);
+
     const dataFromTitle = await fetch(`
         https://www.googleapis.com/books/v1/volumes/${id}`, 
         {cache: "no-cache"});
@@ -39,11 +48,13 @@ export default async function PageDetails({params}: Props) {
     }
     const dataTitleJson: VolumeDoc = await dataFromTitle.json();
 
-    // console.log(dataTitleJson.volumeInfo.categories)
-
     const dataAuthor = await fetch(`
-        https://www.googleapis.com/books/v1/volumes?q=inauthor:${dataTitleJson.volumeInfo.authors}&maxResults=4`
+        https://www.googleapis.com/books/v1/volumes?q=inauthor:${dataTitleJson.volumeInfo.authors}&maxResults=4&key=${process.env.API_KEY}`
     )
+
+    if (!dataAuthor.ok) {
+        throw new Error("Error ao buscar outras outras bibras do autor");
+    };
 
     const dataAuthorJson:DataBookProps = await dataAuthor.json()
     const dataPublisher = dataAuthorJson.items.slice(0, 34).map((books) => {
@@ -57,6 +68,10 @@ export default async function PageDetails({params}: Props) {
     const dataCategory = await fetch(`
         https://www.googleapis.com/books/v1/volumes?q=${dataTitleJson.volumeInfo.categories}&maxResults=4`
     );
+
+    if(!dataCategory.ok) {
+        throw new Error("Error ao buscar obras similares");
+    };
 
     const dataCategoryJson:DataBookProps = await dataCategory.json();
     const dataArrayCategory = dataCategoryJson.items.slice(0, 34).map((category) => {
@@ -91,21 +106,45 @@ export default async function PageDetails({params}: Props) {
                                 />
 
                                 <div className="flex w-full" style={{ marginTop: "0.7rem", gap: "1.3rem" }}>
+                                    {
+                                        dataTitleJson.accessInfo.epub.downloadLink ?
+                                    <Link 
+                                        href={dataTitleJson.accessInfo.epub.downloadLink}
+                                        target="_blank"
+                                        className="bg-red-500 rounded-[100px] font-bold w-full md:flex-[50%]"
+                                        style={{ padding: "1rem" }}
+                                    >
+                                        Leia de graça
+                                    </Link> :
                                     <Link 
                                         href={dataTitleJson.volumeInfo.infoLink}
                                         target="_blank"
                                         className="bg-red-500 rounded-[100px] font-bold w-full md:flex-[50%]"
                                         style={{ padding: "1rem" }}
                                     >
-                                        Compre/Abaixe
+                                        Compre/Alugue
                                     </Link>
 
-                                    <button 
+                                    }
+
+                                    {
+                                        ebook?.isReading === true ? <DesfavoritarEbook />:  
+                                        <FavoritarEbook 
+                                            title={dataTitleJson.volumeInfo.title} 
+                                            imageLink={dataTitleJson.volumeInfo.imageLinks.thumbnail}
+                                            author={dataTitleJson.volumeInfo.authors}   
+                                            linkBuyFree={dataTitleJson.accessInfo.epub.downloadLink} 
+                                            linkRead={dataTitleJson.volumeInfo.infoLink}
+                                        />
+                                    }
+                                    {/* <FavoritarEbook /> */}
+
+                                    {/* <button 
                                         className="bg-red-500 rounded-[100px] font-bold w-full md:w-[50%]"
                                         style={{ padding: "1rem" }}
                                     >
                                         Favoritar
-                                    </button>
+                                    </button> */}
                                 </div>
                             </div>
                             <div className="flex flex-col w-full">
@@ -120,7 +159,7 @@ export default async function PageDetails({params}: Props) {
                                     <div className="flex flex-col md:flex-row items-center justify-between" style={{ gap: "1.4rem" }}>
                                         <div className="flex" style={{ gap: "1rem" }}>
                                             <BookText />
-                                            <p>{dataTitleJson.volumeInfo.categories.length < 3 ? dataTitleJson.volumeInfo.categories: dataTitleJson.volumeInfo.categories.slice(0, 3)}</p>
+                                            <p>{dataTitleJson.volumeInfo.categories}</p>
                                         </div>
 
                                         <div className="flex" style={{ gap: "1rem" }}>
@@ -149,7 +188,7 @@ export default async function PageDetails({params}: Props) {
                                 dataPublisher.map(bookAuthor => (
                                     <Link 
                                         className="flex flex-col justify-center items-center flex-1" 
-                                        key={bookAuthor.title} 
+                                        key={id} 
                                         href={bookAuthor.infoLink} 
                                         target="_blank"
                                     >

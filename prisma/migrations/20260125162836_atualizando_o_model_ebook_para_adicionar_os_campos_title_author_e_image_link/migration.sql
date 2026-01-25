@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "ebook" ADD COLUMN     "author" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "imageLink" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "title" TEXT NOT NULL DEFAULT '';
